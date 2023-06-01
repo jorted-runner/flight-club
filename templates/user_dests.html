@@ -1,0 +1,44 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+<div class="content">
+    <img class="cloud" id="cloud-1" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-2" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-3" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-4" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <div class="destinations-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Destination City</th>
+                    <th>Destination Country</th>
+                    <th>Origin City</th>
+                    <th>Max Price</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for destination in destinations %}
+                <tr>
+                    <td>{{ destination.dest_city }}</td>
+                    <td>{{ destination.dest_country }}</td>
+                    <td>{{ destination.fly_from}}</td>
+                    <td>${{ "{:.2f}".format(destination.max_price) }}</td>
+                    <td><a class="table-button" href="{{url_for('edit_dest', dest_id=destination.id)}}">✏</a></td>
+                    <td><a class="table-button" href="{{url_for('delete_post', index=destination.id) }}">🗑</a></td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+    <div class="buttons">
+        <a  class="btn" id="add-dest" href="{{ url_for('add_dest') }}">Add Destination</a>
+        <a  class="btn" id="get-deals" href="{{ url_for('get_deals') }}">Get Deals Now</a>
+    </div>
+
+</div>
+
+{% include "footer.html" %}

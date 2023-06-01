@@ -1,0 +1,21 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+<div class="content">
+    <img class="cloud" id="cloud-1" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-2" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-3" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-4" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <div class="add-title">
+        {% if is_edit: %}
+        <h1>Edit Destination</h1>
+        {% else: %}
+        <h1>Add Destination</h1>
+        {% endif %}
+    </div>
+    <div class="form">
+        {{ wtf.quick_form(dest_form, novalidate=True, button_map={"submit": "secondary"}) }}
+    </div>
+</div>
+
+{% include "footer.html" %}

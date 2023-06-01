@@ -1,0 +1,20 @@
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% include "header.html" %}
+  
+  <div class="content">
+    <img class="cloud" id="cloud-1" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-2" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-3" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-4" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <div class="add-title">
+      <h1>Login</h1>
+  </div>
+      <div class="form">
+        <div style="color: red"> {% with messages = get_flashed_messages() %} {{ messages[0] }} {% endwith %} </div>
+        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+      </div>
+  </div>
+
+{% include "footer.html" %}

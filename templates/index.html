@@ -1,0 +1,36 @@
+{% include "header.html" %}
+
+<div class="content">
+    <img class="plane" src="{{url_for('static', filename='images/airplane_02.png')}}">
+    <img class="cloud" id="cloud-1" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-2" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-3" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-4" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-5" src="{{url_for('static', filename='images/cloud_02.png')}}">
+    <img class="cloud" id="cloud-6" src="{{url_for('static', filename='images/cloud_02.png')}}">
+
+
+    <div class="title">
+        <h1>Flight Club</h1>
+        <p class="sub-title">Find Cheap Flights To Places You Actually Want To Visit</p>
+    </div>
+    <div class="about">
+        <hr>
+        <h2>What is Flight Club?</h2>
+        <p>Flight Club is a web service that finds the cheapest flight to a destination within the next 6 months. As a user
+            you will receive daily updates for flights found under your designated price, as well as have the option to instantly receive
+            deals. All of our deals are sent via email in the dead of night so that you can wake up to a fresh set of deals each morning.
+        </p>
+    </div>
+    <div class="contact-us">
+        <hr>
+        <h2>Need to get ahold of us?</h2>
+        <p>Flight Club is a web service that finds the cheapest flight to a destination within the next 6 months. As a user
+            you will receive daily updates for flights found under your designated price, as well as have the option to instantly receive
+            deals. All of our deals are sent via email in the dead of night so that you can wake up to a fresh set of deals each morning.
+        </p>
+        <a class="btn" href="mailto:jorted.python@gmail.com">CONTACT ME</a>
+    </div>
+</div>
+{% include "footer.html" %}
+
