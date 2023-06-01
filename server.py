@@ -193,4 +193,4 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run()
