@@ -206,7 +206,7 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    schedular.add_job(id = 'Scheduled task', func= send_daily_alerts, trigger = 'cron', month= '*', day= '*', hour = '16', minute = '5')
+    schedular.add_job(id = 'Scheduled task', func= send_daily_alerts, trigger = 'cron', month= '*', day= '*', hour = '4')
     schedular.start()
-    port = int(os.environ.get("PORT"))
+    port = int(os.environ.get("PORT", "5000"))
     app.run(host="0.0.0.0", port=port)
