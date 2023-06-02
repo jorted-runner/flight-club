@@ -27,7 +27,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///destinations.db") 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///destinations.db").replace("postgres://", "postgresql://", 1) 
 
 db.init_app(app)
 
