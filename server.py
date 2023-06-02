@@ -13,9 +13,18 @@ from notification_manager import NotificationManager
 
 from forms import AddDests, NewUser, UserLogin
 
+import os
+from dotenv import load_dotenv
+
+
+def configure():
+    load_dotenv()
+
+configure()
+
 db = SQLAlchemy()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "secretKeyFlightClub"
+app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///destinations.db' 
@@ -193,4 +202,4 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000)
