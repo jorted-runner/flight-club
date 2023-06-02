@@ -209,7 +209,7 @@ def delete_post(index):
 
 if __name__ == "__main__":
     central_tz = timezone('US/Central')
-    schedular.add_job(send_daily_alerts, 'cron', hour=16, minute=45, timezone=central_tz)
+    schedular.add_job(send_daily_alerts, 'cron', day_of_week='*', hour=16, minute=45, timezone=central_tz)
     schedular.start()
     port = int(os.environ.get("PORT"))
     app.run(host="0.0.0.0", port=port)
