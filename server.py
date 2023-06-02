@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import timezone
+from apscheduler.triggers.cron import CronTrigger
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -27,7 +28,7 @@ configure()
 
 db = SQLAlchemy()
 app = Flask(__name__)
-schedular = BackgroundScheduler()
+schedular = BackgroundScheduler(timezone="US/Central")
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
@@ -208,8 +209,8 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    central_tz = timezone('US/Central')
-    schedular.add_job(send_daily_alerts, 'cron', day_of_week='*', hour=16, minute=45, timezone=central_tz)
+    trigger = CronTrigger(hour=16, minute=51)
+    schedular.add_job(send_daily_alerts, trigger=trigger)
     schedular.start()
     port = int(os.environ.get("PORT"))
     app.run(host="0.0.0.0", port=port)
