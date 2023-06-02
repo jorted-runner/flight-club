@@ -2,7 +2,8 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_apscheduler import APScheduler
+
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,7 +26,7 @@ configure()
 
 db = SQLAlchemy()
 app = Flask(__name__)
-schedular = APScheduler()
+schedular = BackgroundScheduler()
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
@@ -206,7 +207,7 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    schedular.add_job(id = 'Scheduled task', func= send_daily_alerts, trigger = 'cron', month= '*', day= '*', hour = '4')
+    schedular.add_job(id = 'Scheduled task', func= send_daily_alerts, trigger = 'cron', month= '*', day= '*', hour = '16', minute = '19')
     schedular.start()
-    port = int(os.environ.get("PORT", "5000"))
+    port = int(os.environ.get("PORT"))
     app.run(host="0.0.0.0", port=port)
