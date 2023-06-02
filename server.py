@@ -28,7 +28,7 @@ configure()
 
 db = SQLAlchemy()
 app = Flask(__name__)
-schedular = BackgroundScheduler(timezone="US/Central")
+schedular = BackgroundScheduler()
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
@@ -209,7 +209,7 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    trigger = CronTrigger(hour=16, minute=51)
+    trigger = CronTrigger(hour=21, minute=55)
     schedular.add_job(send_daily_alerts, trigger=trigger)
     schedular.start()
     port = int(os.environ.get("PORT"))
