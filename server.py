@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from pytz import timezone
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -207,7 +208,8 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    schedular.add_job(send_daily_alerts, 'cron', hour=16, minute=35)
+    central_tz = timezone('US/Central')
+    schedular.add_job(send_daily_alerts, 'cron', hour=16, minute=45, timezone=central_tz)
     schedular.start()
     port = int(os.environ.get("PORT"))
     app.run(host="0.0.0.0", port=port)
