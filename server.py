@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from flask_apscheduler import APScheduler
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,6 +25,7 @@ configure()
 
 db = SQLAlchemy()
 app = Flask(__name__)
+schedular = APScheduler()
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
@@ -69,25 +71,27 @@ data_manager = DataManager()
 flight_search = FlightSearch()
 notifications = NotificationManager()
 
-def daily_email():
-    users = Users.query.all()
-    for user in users:
-        user_destinations = user.destinations
-        for destination in user_destinations:
-            cheap_flights, PRICE = flight_search.search_cheap_flights(destination)
-            find_cheapest = FlightData()
-            lowest = find_cheapest.get_lowest_price(cheap_flights, PRICE)
-            if len(lowest) == 0:
-                pass
-            else:
-                cheapest_url = lowest["deep_link"]
-                email = user.email
-                departure, return_date = find_cheapest.get_dates_of_flights(lowest)
-                notifications.send_email(lowest, departure, return_date, cheapest_url, email)
-
 @app.route("/")
 def home():
     return render_template('index.html')
+
+def send_daily_alerts():
+    with app.app_context():
+        users = Users.query.all()
+        for user in users:
+            user_destinations = user.destinations
+            for destination in user_destinations:
+                cheap_flights, PRICE = flight_search.search_cheap_flights(destination)
+                find_cheapest = FlightData()
+                lowest = find_cheapest.get_lowest_price(cheap_flights, PRICE)
+                if len(lowest) == 0:
+                    pass
+                else:
+                    cheapest_url = lowest["deep_link"]
+                    email = user.email
+                    departure, return_date = find_cheapest.get_dates_of_flights(lowest)
+                    notifications.send_email(lowest, departure, return_date, cheapest_url, email)
+
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -202,5 +206,7 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
+    schedular.add_job(id = 'Scheduled task', func= send_daily_alerts, trigger = 'cron', month= '*', day= '*', hour = '16', minute = '5')
+    schedular.start()
     port = int(os.environ.get("PORT"))
     app.run(host="0.0.0.0", port=port)
