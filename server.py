@@ -3,9 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from pytz import timezone
-from apscheduler.triggers.cron import CronTrigger
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -28,7 +26,7 @@ configure()
 
 db = SQLAlchemy()
 app = Flask(__name__)
-schedular = BackgroundScheduler()
+schedular = BlockingScheduler()
 app.config['SECRET_KEY'] = os.environ.get("appSecretKey")
 Bootstrap(app)
 
@@ -78,6 +76,7 @@ notifications = NotificationManager()
 def home():
     return render_template('index.html')
 
+@schedular.scheduled_job('cron', day_of_week='*', hour=2, minute=57)
 def send_daily_alerts():
     with app.app_context():
         users = Users.query.all()
@@ -209,8 +208,6 @@ def delete_post(index):
     return redirect(url_for('user_dests')) 
 
 if __name__ == "__main__":
-    trigger = CronTrigger(hour=21, minute=55)
-    schedular.add_job(send_daily_alerts, trigger=trigger)
     schedular.start()
     port = int(os.environ.get("PORT", "5000"))
     app.run(host="0.0.0.0", port=port)
