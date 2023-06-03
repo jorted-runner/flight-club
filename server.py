@@ -212,5 +212,5 @@ if __name__ == "__main__":
     trigger = CronTrigger(hour=21, minute=55)
     schedular.add_job(send_daily_alerts, trigger=trigger)
     schedular.start()
-    port = int(os.environ.get("PORT"))
+    port = int(os.environ.get("PORT", "5000"))
     app.run(host="0.0.0.0", port=port)
